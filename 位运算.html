@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    var myWorker = new Worker("Worker.js");
+
+    let arr = [];
+
+    function generateRandomArray(length) {
+      const min = 0;
+      const max = 1099511627775; // 2^40 - 1
+
+      const randomArray = Array.from({ length }, () => Math.floor(Math.random() * (max - min + 1)) + min);
+
+      return randomArray;
+    }
+
+    const randomArray = generateRandomArray(10000);
+    // console.log(JSON.stringify(randomArray));
+    arr = randomArray;
+
+    const _10tonRadix = (n) => (target) => target.toString(n);
+
+    const resolveParameter = (parameter = 0) => {
+      const flagArray = _10tonRadix(2)(parameter)
+        .split("")
+        .reverse()
+        .map((str) => parseInt(str));
+
+      return {
+        weight: true, //flagArray[1] === 1, // 体重写死为 true
+        stature: flagArray[39] === 1,
+        health_report: flagArray[0] === 1,
+        bmi: flagArray[2] === 1,
+        body_fat: flagArray[3] === 1,
+        subcutaneous_fat: flagArray[4] === 1, // 皮下脂肪
+        visceral_fat_grade: flagArray[5] === 1,
+        body_water: flagArray[6] === 1,
+        skeletal_muscle: flagArray[7] === 1, // 骨骼肌
+        bone_mass: flagArray[8] === 1, // 骨量
+        bmr: flagArray[9] === 1,
+        body_type: flagArray[10] === 1,
+        protein: flagArray[11] === 1,
+        lean_body_mass: flagArray[12] === 1, // 去脂体重
+        muscle_mass: flagArray[13] === 1, // 肌肉量
+        muscle_storage_level: flagArray[36] === 1, // 储肌能力等级
+        metabolic_age: flagArray[14] === 1, // 体年龄
+        heart_rate: flagArray[16] === 1,
+        cardiac_index: flagArray[17] === 1,
+        balance: flagArray[35] === 1,
+        obesity: true,
+        body_fat_mass: true,
+        skeletal_muscle_rate: flagArray[37] === 1,
+        waist: flagArray[38] === 1,
+        hip: flagArray[38] === 1,
+        chest: flagArray[38] === 1,
+        abdomen: flagArray[38] === 1,
+        neck: flagArray[38] === 1,
+        left_arm: flagArray[38] === 1,
+        right_arm: flagArray[38] === 1,
+        left_thigh: flagArray[38] === 1,
+        right_thigh: flagArray[38] === 1,
+        waist_to_hip_ratio: flagArray[38] === 1,
+      };
+    };
+    const timestamp = Date.now();
+    arr.forEach((item) => {
+      const res = resolveParameter(item);
+      const logContent = Date.now() + JSON.stringify(res);
+      MyLog(logContent);
+      // console.log(logContent);
+    });
+    console.log(Date.now() - timestamp);
+
+    function MyLog(content) {
+      myWorker.postMessage(content);
+    }
+  </script>
+</html>

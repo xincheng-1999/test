@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    fetch("http://localhost:3330/video").then(async (res) => {
+      console.log(res);
+      const videoEle = document.createElement("video");
+      const blob = await res.blob();
+      console.log(blob);
+      const blobUrl = URL.createObjectURL(blob);
+      videoEle.src = blobUrl;
+      videoEle.width = 50;
+      videoEle.height = 80;
+      videoEle.autoplay = true;
+      videoEle.controls = true;
+      videoEle.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+      });
+      document.body.appendChild(videoEle);
+    });
+  </script>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .rounded-border {
+        position: relative;
+        width: 200px;
+        height: 100px;
+        border: 2px solid transparent; /* 透明边框 */
+
+        background: red;
+      }
+
+      .rounded-border::before {
+        content: "";
+        position: absolute;
+        top: 2px; /* 调整内部弧度位置 */
+        left: 2px; /* 调整内部弧度位置 */
+        width: calc(100% - 4px); /* 减去外部边框宽度 */
+        height: calc(100% - 4px); /* 减去外部边框宽度 */
+        background: #f0f0f0; /* 与容器背景色相同 */
+        border-radius: 10px; /* 内部弧度，与外部一致 */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="rounded-border"></div>
+  </body>
+</html>

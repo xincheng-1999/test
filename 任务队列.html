@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html ang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="box">1111</div>
+  </body>
+  <script>
+    const box = document.querySelector("#box");
+
+    box.addEventListener("click", () => {
+      console.log("click");
+    });
+
+    let i = 0;
+    function aa() {
+      Promise.resolve().then(() => {
+        if (i > 100000) {
+          console.log("结束");
+          return;
+        }
+        i++;
+        console.log(i.toString());
+        aa();
+      });
+    }
+
+    box.addEventListener("dblclick", () => {
+      setTimeout(() => {
+        console.log("timeout");
+      }, 1000);
+      aa();
+      queueMicrotask(() => {});
+      console.log("dblclick");
+    });
+  </script>
+</html>

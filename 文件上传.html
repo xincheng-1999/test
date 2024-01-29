@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input id="file-input" type="file" />
+  </body>
+  <script>
+    const fileInput = document.getElementById("file-input"); // 替换为实际的文件输入元素ID
+    const url = "http://example.com/upload"; // 替换为实际的上传接口地址
+
+    fileInput.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const binaryData = e.target.result;
+        console.log(binaryData, file.type);
+        fetch(url, {
+          method: "POST",
+          body: binaryData,
+          headers: {
+            "Content-Type": file.type,
+          },
+        })
+          .then((response) => response.text())
+          .then((result) => console.log(result))
+          .catch((error) => console.error(error));
+      };
+
+      reader.readAsArrayBuffer(file);
+    });
+  </script>
+</html>

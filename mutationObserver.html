@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="box">888</div>
+  </body>
+  <script>
+    const box = document.querySelector("#box");
+    const observer = new MutationObserver((mutationRecords) => {
+      mutationRecords.forEach((mutationRecord) => {
+        console.log(mutationRecord);
+      });
+    });
+    observer.observe(box, { subtree: true, attributes: true, childList: true });
+    box.addEventListener("click", () => {
+      const child = document.createElement("div");
+      child.innerText = "777";
+
+      box.appendChild(child);
+      Promise.resolve().then(() => {
+        console.log("promise");
+      });
+    });
+  </script>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>canvas环形进度条</title>
+    <style>
+      body {
+        margin: 30px 0;
+        text-align: center;
+      }
+
+      #canvas {
+        background: #f6f6f6;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="300" height="300">您的浏览器不支持 HTML5 canvas 标签。</canvas>
+    <script>
+      let c = document.getElementById("canvas");
+      let ctx = c.getContext("2d");
+      let precent = 100,
+        num = 0;
+      let startColor = "#29d6b5",
+        endColor = "#ff96c7",
+        colorArr = [];
+
+      ctx.fillStyle = "#FF0000";
+
+      //计算渐变色数组
+      (function getColorArr() {
+        let startRgb = hexToRgb(startColor);
+        let endRgb = hexToRgb(endColor);
+
+        let stepR = (endRgb[0] - startRgb[0]) / precent;
+        let stepG = (endRgb[1] - startRgb[1]) / precent;
+        let stepB = (endRgb[2] - startRgb[2]) / precent;
+
+        for (let i = 0; i <= precent; i++) {
+          let hex = rgbToHex(startRgb[0] + stepR * i, startRgb[1] + stepG * i, startRgb[2] + stepB * i);
+          hex = hex.length == 4 ? "00" + hex : hex.length == 5 ? "0" + hex : hex;
+          colorArr.push("#" + hex);
+        }
+      })();
+
+      function hexToRgb(hex) {
+        if (hex.length == 4)
+          return [parseInt("0x" + hex.slice(1, 2).repeat(2)), parseInt("0x" + hex.slice(2, 3).repeat(2)), parseInt("0x" + hex.slice(3, 4).repeat(2))];
+        else if (hex.length == 7) return [parseInt("0x" + hex.slice(1, 3)), parseInt("0x" + hex.slice(3, 5)), parseInt("0x" + hex.slice(5, 7))];
+        else alert("颜色错误");
+      }
+
+      function rgbToHex(r, g, b) {
+        return ((r << 16) | (g << 8) | b).toString(16);
+      }
+
+      //绘制轨道
+      drawTrack();
+      function drawTrack() {
+        ctx.save();
+        ctx.beginPath();
+        ctx.lineCap = "round";
+        ctx.lineWidth = 8;
+        ctx.strokeStyle = "#e5f1fa";
+        ctx.arc(150, 150, 100, 0, 2 * Math.PI);
+        ctx.stroke();
+        ctx.closePath();
+        ctx.restore();
+      }
+
+      //绘制进度环
+      function drawProgress(num) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.lineCap = num == precent ? "" : "round";
+        ctx.lineWidth = 8;
+        // ctx.strokeStyle = '#2ba0fb'
+        ctx.strokeStyle = colorArr[num];
+        // context.arc(x,y,r,sAngle,eAngle,counterclockwise);   //x坐标,y坐标,半径,起始角,结束角,顺时针/逆时针
+        ctx.arc(150, 150, 100, -Math.PI / 2 + ((2 * (num - 1)) / 100) * Math.PI, -Math.PI / 2 + ((2 * num) / 100) * Math.PI);
+        ctx.stroke();
+        ctx.closePath();
+        ctx.restore();
+      }
+
+      //绘制文字
+      function drawText(num) {
+        ctx.save();
+        ctx.fillStyle = "#3396c7";
+
+        ctx.font = "40px Helvetica";
+        ctx.textAlign = "center";
+        ctx.fillText(num + "%", 150, 160);
+        ctx.restore();
+      }
+
+      //动画
+      (function draw() {
+        ctx.clearRect(85, 85, 130, 130);
+        drawProgress(num);
+        drawText(num);
+        num += 1;
+        if (num <= precent) window.requestAnimationFrame(draw);
+        else num = precent;
+      })();
+    </script>
+  </body>
+</html>

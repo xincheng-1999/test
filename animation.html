@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      @keyframes sizeChange {
+        0% {
+          height: 100px;
+        }
+        50% {
+          height: 200px;
+        }
+        100% {
+          height: 300px;
+        }
+      }
+
+      .sizeChangeAnimation {
+        width: 100px;
+        height: 100px;
+        background-color: red;
+        animation-name: sizeChange;
+        animation-duration: 4s;
+        animation-iteration-count: infinite;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sizeChangeAnimation"></div>
+    <p>
+      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo atque autem consequuntur omnis excepturi illo corporis dicta quos iusto,
+      doloribus explicabo iure cupiditate accusantium temporibus tenetur laborum voluptatum sint. Excepturi!
+    </p>
+    <div id="container"></div>
+  </body>
+  <script>
+    const container = document.querySelector("#container");
+    const fragment = new DocumentFragment();
+    fragment.appendChild(document.createElement("img"));
+    fragment.appendChild(document.createElement("img"));
+    fragment.appendChild(document.createElement("img"));
+    container.appendChild(fragment);
+  </script>
+</html>

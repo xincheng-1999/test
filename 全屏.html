@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .button {
+        position: fixed;
+        left: -100px;
+      }
+    </style>
+  </head>
+  <body>
+    <button class="button" type="button">点击</button>
+  </body>
+  <script>
+    const button = document.querySelector(".button");
+    button.onclick = () => {
+      document.documentElement.requestFullscreen();
+    };
+    setTimeout(() => {
+      button.click();
+      document.body.click();
+      button.click();
+      button.click();
+    }, 3000);
+  </script>
+</html>

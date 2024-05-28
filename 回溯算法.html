@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    function generateRandomNumbers(n, min, max) {
+      let numbers = [];
+      for (let i = 0; i < n; i++) {
+        numbers.push(Math.floor(Math.random() * (max - min + 1)) + min);
+      }
+      return numbers;
+    }
+
+    function findMinDifferencePartition(arr) {
+      let n = arr.length;
+      let totalSum = arr.reduce((a, b) => a + b, 0);
+      let bestDifference = Infinity;
+      let bestPartition = null;
+
+      function backtrack(index, group1, group2) {
+        if (index === n) {
+          if (group1.length === 5 && group2.length === 5) {
+            let sum1 = group1.reduce((a, b) => a + b, 0);
+            let sum2 = group2.reduce((a, b) => a + b, 0);
+            let difference = Math.abs(sum1 - sum2);
+            if (difference < bestDifference) {
+              bestDifference = difference;
+              bestPartition = [group1.slice(), group2.slice()];
+            }
+          }
+          return;
+        }
+
+        if (group1.length < 5) {
+          group1.push(arr[index]);
+          backtrack(index + 1, group1, group2);
+          group1.pop();
+        }
+
+        if (group2.length < 5) {
+          group2.push(arr[index]);
+          backtrack(index + 1, group1, group2);
+          group2.pop();
+        }
+      }
+
+      backtrack(0, [], []);
+
+      return { group1: bestPartition[0], group2: bestPartition[1], diff: bestDifference };
+    }
+
+    let numbers = generateRandomNumbers(10, 1, 100);
+    let result = findMinDifferencePartition(numbers);
+
+    console.log("Numbers: ", numbers);
+    console.log("Group 1: ", result.group1);
+    console.log("Group 2: ", result.group2);
+    console.log("Difference: ", result.diff);
+  </script>
+</html>

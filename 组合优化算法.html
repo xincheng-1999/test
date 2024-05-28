@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    function generateRandomNumbers(n, min, max) {
+      let numbers = [];
+      for (let i = 0; i < n; i++) {
+        numbers.push(Math.floor(Math.random() * (max - min + 1)) + min);
+      }
+      return numbers;
+    }
+
+    function findMinDifferencePartition(arr) {
+      let n = arr.length;
+      let totalSum = arr.reduce((a, b) => a + b, 0);
+      let half = n / 2;
+
+      // dp[mask] stores the sum of the subset represented by the mask
+      let dp = new Array(1 << n).fill(0);
+
+      // Initialize dp with the sums of the subsets
+      for (let mask = 0; mask < 1 << n; mask++) {
+        for (let i = 0; i < n; i++) {
+          if (mask & (1 << i)) {
+            dp[mask] += arr[i];
+          }
+        }
+      }
+
+      let minDifference = Infinity;
+      let bestPartition = null;
+
+      // Iterate over all possible masks
+      for (let mask = 0; mask < 1 << n; mask++) {
+        // Count the number of set bits (1s) in the mask
+        let count = 0;
+        for (let i = 0; i < n; i++) {
+          if (mask & (1 << i)) {
+            count++;
+          }
+        }
+
+        // We need exactly half elements in each subset
+        if (count === half) {
+          let sum1 = dp[mask];
+          let sum2 = totalSum - sum1;
+          let difference = Math.abs(sum1 - sum2);
+
+          if (difference < minDifference) {
+            minDifference = difference;
+            bestPartition = mask;
+          }
+        }
+      }
+
+      // Create the two groups based on the best partition mask
+      let group1 = [],
+        group2 = [];
+      for (let i = 0; i < n; i++) {
+        if (bestPartition & (1 << i)) {
+          group1.push(arr[i]);
+        } else {
+          group2.push(arr[i]);
+        }
+      }
+
+      return { group1, group2, diff: minDifference };
+    }
+
+    let numbers = generateRandomNumbers(10, 1, 100);
+    let result = findMinDifferencePartition(numbers);
+
+    console.log("Numbers: ", numbers);
+    console.log("Group 1: ", result.group1);
+    console.log("Group 2: ", result.group2);
+    console.log("Difference: ", result.diff);
+  </script>
+</html>

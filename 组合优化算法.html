@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    meta
     <title>Document</title>
   </head>
   <body></body>
@@ -22,7 +23,7 @@
 
       // dp[mask] stores the sum of the subset represented by the mask
       let dp = new Array(1 << n).fill(0);
-
+      console.log("dp", dp);
       // Initialize dp with the sums of the subsets
       for (let mask = 0; mask < 1 << n; mask++) {
         for (let i = 0; i < n; i++) {
